@@ -1,0 +1,49 @@
+{
+  "name": "saudi_new_plate",
+  "version": 2,
+  "data": {
+    "gen": {
+      "pattern": "%nwb%nwb%nwb%d%nb%nb%nb",
+      "patternData": {
+        "nb": ["A", "B", "D", "E", "G", "H", "J", "K", "L", "N", "R", "S", "T", "U", "V", "X", "Z"],
+        "nwb": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"]
+      }
+    },
+    "format": {
+      "52-11-design2": {
+        "size": {
+          "x": 2048,
+          "y": 392
+        },
+        "text": {
+          "x": 0.225,
+          "y": 0.31,
+          "x2": 0.81,
+          "y2": 0.29,
+          "scale": 0.615,
+          "scale2": 0.60,
+          "toUpperCase": true,
+          "color": "black",
+          "limit": 4,
+          "limit2": 3
+        },
+        "generator": "licenseplate.html",
+        "characterLayout": "platefont_eu.json",
+        "diffuse": {
+          "spriteImg": "platefont_eu_d.png",
+          "backgroundImg": "diriyah_background_52-11_d.png",
+          "fillStyle": "black"
+        },
+        "bump": {
+          "spriteImg": "platefont_eu_n.png",
+          "backgroundImg": "special_background_52-11_n.png",
+          "fillStyle": "rgb(0,0,255)"
+        },
+        "specular": {
+          "spriteImg": "platefont_eu_s.png",
+          "fillStyle": "rgb(233,233,233)"
+        }
+      }
+    }
+  }
+}
