@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مولد لوحة سعودية مخصص</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    input[type="text"] {
+      @apply w-12 h-12 text-center border border-gray-400 rounded font-bold text-xl;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-6 flex flex-col items-center">
+  <!-- تحكم المستخدم -->
+  <div class="flex flex-col md:flex-row gap-4 items-center justify-center mb-6">
+    <div>
+      <label class="block mb-1">نوع اللوحة:</label>
+      <select id="plateFormat" class="p-2 border rounded w-48">
+        <option value="black.json">نخلة سوداء</option>
+        <option value="ola.json">العلا</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block mb-1">أحرف اللوحة:</label>
+      <div class="flex gap-1" id="lettersInput">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+      </div>
+    </div>
+
+    <div>
+      <label class="block mb-1">أرقام اللوحة:</label>
+      <div class="flex gap-1" id="numbersInput">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+      </div>
+    </div>
+
+    <button id="generateButton" class="bg-blue-600 text-white px-4 py-2 rounded mt-4 md:mt-8">توليد اللوحة</button>
+  </div>
+
+  <!-- عرض اللوحة -->
+  <canvas id="canvas" width="600" height="300" class="border bg-white"></canvas>
+
+  <!-- دعم التوليد -->
+  <script>
+    function getPlateText() {
+      const letters = [...document.querySelectorAll('#lettersInput input')].map(i => i.value.toUpperCase()).join('');
+      const numbers = [...document.querySelectorAll('#numbersInput input')].map(i => i.value).join('');
+      return letters + numbers;
+    }
+
+    document.getElementById('generateButton').addEventListener('click', () => {
+      const plateFormat = document.getElementById('plateFormat').value;
+      const text = getPlateText();
+
+      if (typeof window.generatePlate === 'function') {
+        window.generatePlate({
+          format: plateFormat,
+          text: text
+        });
+      } else {
+        alert("الوظيفة الرسومية غير مُحمّلة بعد. تأكد من تحميل script.js")
+      }
+    });
+  </script>
+
+  <!-- دمج المحرك الرسومي المتقدم -->
+  <script src="script.js"></script>
+</body>
+</html>
