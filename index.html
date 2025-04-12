@@ -7,11 +7,16 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     input[type="text"] {
-      @apply w-12 h-12 border border-gray-400 rounded font-bold text-xl;
+      width: 3rem;
+      height: 3rem;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.375rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
     }
   </style>
 </head>
@@ -49,8 +54,8 @@
   </div>
 
   <!-- عرض اللوحة -->
-  <div class="w-full max-w-4xl overflow-x-auto">
-    <canvas id="canvas" class="border bg-white w-full h-auto aspect-[2/1]"></canvas>
+  <div class="w-full max-w-3xl">
+    <canvas id="canvas" class="border bg-white w-full aspect-[2/1] h-auto"></canvas>
   </div>
 
   <!-- أزرار التحكم -->
@@ -90,46 +95,49 @@
       });
     });
 
-    function getPlateText() {
-      const letters = [...document.querySelectorAll('#lettersInput input')].map(i => i.value.toUpperCase());
-      const numbers = [...document.querySelectorAll('#numbersInput input')].map(i => i.value);
+    function getPlateParts() {
+      const letters = [...document.querySelectorAll('#lettersInput input')].map(i => i.value.trim().toUpperCase());
+      const numbers = [...document.querySelectorAll('#numbersInput input')].map(i => i.value.trim());
 
       const isArabicInput = letters.some(l => arabicToLatinMap[l]) || numbers.some(n => arabicNums.includes(n));
 
-      let displayArabicLetters = [], displayLatinLetters = [];
-      let displayArabicNumbers = [], displayLatinNumbers = [];
+      let arabicLetters = '', latinLetters = '';
+      let arabicNumbers = '', latinNumbers = '';
 
       letters.forEach(l => {
         if (isArabicInput) {
-          displayArabicLetters.push(l);
-          displayLatinLetters.push(arabicToLatinMap[l] || l);
+          arabicLetters += l;
+          latinLetters += arabicToLatinMap[l] || l;
         } else {
-          displayLatinLetters.push(l);
-          displayArabicLetters.push(latinToArabicMap[l] || l);
+          latinLetters += l;
+          arabicLetters += latinToArabicMap[l] || l;
         }
       });
 
       numbers.forEach(n => {
         if (isArabicInput) {
-          displayArabicNumbers.push(n);
-          displayLatinNumbers.push(convertNumberToLatin(n));
+          arabicNumbers += n;
+          latinNumbers += convertNumberToLatin(n);
         } else {
-          displayLatinNumbers.push(n);
-          displayArabicNumbers.push(convertNumberToArabic(n));
+          latinNumbers += n;
+          arabicNumbers += convertNumberToArabic(n);
         }
       });
 
-      return displayArabicLetters.concat(displayArabicNumbers, displayLatinLetters, displayLatinNumbers).join('');
+      return { arabicLetters, arabicNumbers, latinLetters, latinNumbers };
     }
 
     document.getElementById('generateButton').addEventListener('click', () => {
       const plateFormat = document.getElementById('plateFormat').value;
-      const text = getPlateText();
+      const { arabicLetters, arabicNumbers, latinLetters, latinNumbers } = getPlateParts();
 
       if (typeof window.generatePlate === 'function') {
         window.generatePlate({
           format: plateFormat,
-          text: text
+          arabicLetters,
+          arabicNumbers,
+          latinLetters,
+          latinNumbers
         });
       } else {
         alert("الوظيفة الرسومية غير مُحمّلة بعد. تأكد من تحميل script.js");
