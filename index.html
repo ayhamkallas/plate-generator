@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مولد لوحة سعودية مخصص</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    input[type="text"] {
+      @apply w-12 h-12 text-center border border-gray-400 rounded font-bold text-xl;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-6 flex flex-col items-center">
+
+  <!-- التحكم -->
+  <div class="flex flex-col items-center gap-4 mb-6">
+    <div class="w-full max-w-md">
+      <label class="block mb-1 text-center">نوع اللوحة:</label>
+      <select id="plateFormat" class="w-full p-2 border rounded">
+        <option value="black.json">نخلة سوداء</option>
+        <option value="ola.json">العلا</option>
+      </select>
+    </div>
+
+    <div class="w-full max-w-md">
+      <label class="block mb-1 text-center">أحرف اللوحة:</label>
+      <div class="flex justify-center gap-2" id="lettersInput">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+      </div>
+    </div>
+
+    <div class="w-full max-w-md">
+      <label class="block mb-1 text-center">أرقام اللوحة:</label>
+      <div class="flex justify-center gap-2" id="numbersInput">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+      </div>
+    </div>
+  </div>
+
+  <!-- عرض اللوحة -->
+  <canvas id="canvas" width="600" height="300" class="border bg-white mb-6"></canvas>
+
+  <!-- أزرار التحكم -->
+  <div class="flex gap-4">
+    <button id="generateButton" class="bg-blue-600 text-white px-4 py-2 rounded">توليد اللوحة</button>
+    <button id="shareButton" class="bg-green-600 text-white px-4 py-2 rounded">مشاركة</button>
+  </div>
+
+  <script>
+    const allInputs = document.querySelectorAll('input');
+    allInputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1 && allInputs[index + 1]) {
+          allInputs[index + 1].focus();
+        }
+      });
+    });
+
+    function getPlateText() {
+      const letters = [...document.querySelectorAll('#lettersInput input')].map(i => i.value.toUpperCase()).join('');
+      const numbers = [...document.querySelectorAll('#numbersInput input')].map(i => i.value).join('');
+      return letters + numbers;
+    }
+
+    document.getElementById('generateButton').addEventListener('click', () => {
+      const plateFormat = document.getElementById('plateFormat').value;
+      const text = getPlateText();
+
+      if (typeof window.generatePlate === 'function') {
+        window.generatePlate({
+          format: plateFormat,
+          text: text
+        });
+      } else {
+        alert("الوظيفة الرسومية غير مُحمّلة بعد. تأكد من تحميل script.js");
+      }
+    });
+
+    document.getElementById('shareButton').addEventListener('click', () => {
+      alert("سيتم إضافة ميزة المشاركة لاحقًا");
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
